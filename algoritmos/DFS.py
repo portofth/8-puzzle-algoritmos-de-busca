@@ -1,3 +1,31 @@
+def encontrar_posicao_zero(estado):
+    """Retorna o índice (0 a 8) onde o espaço vazio (0) está localizado."""
+    return estado.index(0)
+
+def gerar_sucessores(estado):
+    """
+    Gera os estados filhos (vizinhos) a partir dos movimentos válidos do zero.
+    As movimentações simulam um tabuleiro 3x3 em uma fita linear de 9 posições.
+    """
+    filhos = []
+    pos_zero = encontrar_posicao_zero(estado)
+
+    movimentos = {
+        "CIMA":    (-3, pos_zero >= 3),
+        "BAIXO":   ( 3, pos_zero <= 5),
+        "ESQUERDA":(-1, pos_zero % 3 != 0),
+        "DIREITA": ( 1, pos_zero % 3 != 2)
+    }
+
+    for direcao, (deslocamento, condicao_valida) in movimentos.items():
+        if condicao_valida:
+            novo_estado = list(estado)
+            alvo = pos_zero + deslocamento
+            novo_estado[pos_zero], novo_estado[alvo] = novo_estado[alvo], novo_estado[pos_zero]
+            filhos.append(novo_estado)
+
+    return filhos
+
 def buscar_dfs_real(estado_inicial, limite_profundidade=30):
     """
     Executa a Busca em Profundidade (DFS) com limite para o 8-Puzzle.
